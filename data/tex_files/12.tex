@@ -1,0 +1,25 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usetikzlibrary{angles,quotes}
+
+\begin{document}
+\begin{tikzpicture}[thick,>=stealth',line join=round,
+        attention/.style={draw=red,fill=red!15,very thick}]
+
+    % Draw the inclined plane
+    \coordinate (O) at (0,0);
+    \coordinate (A) at (4,2);
+    \draw[very thick] (O) -- (A) -- +(0,-2) -- cycle;
+
+    % Draw the box
+    \draw[attention,shift={(2,1)}] (-0.5,-0.5) rectangle (0.5,0.5);
+
+    % Draw the forces
+    \draw[blue,->,shift={(2,1)}] (0,0) -- ++(0,-1) node[midway,left] {Gravity};
+    \draw[blue,->,shift={(2,1)}] (0,0) -- ++(-0.5,0.5) node[midway,above] {Normal};
+    \draw[blue,->,shift={(2,1)}] (0,0) -- ++(-1,0) node[midway,above] {Friction};
+    
+    % Draw the angle
+    \pic [draw, ->, "θ", angle eccentricity=1.5] {angle = A--O--(O|-A)};
+
+\end{tikzpicture}
+\end{document}

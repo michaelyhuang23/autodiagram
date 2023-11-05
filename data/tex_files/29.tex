@@ -1,0 +1,21 @@
+\documentclass[tikz,border=1mm]{standalone}
+
+\begin{document}
+\begin{tikzpicture}
+
+% Draw inclined plane
+\draw[thick] (0,0) -- (4,2);
+
+% Draw rectangle (object)
+\draw[thick] (2,1) rectangle (2.5,1.3);
+
+% Define center of rectangle
+\coordinate (center) at (2.25,1.15);
+
+% Draw vectors (forces)
+\draw[red, -latex] (center) -- ++(270:1) node[near end,left] {}; % weight
+\draw[blue, -latex] (center) -- ++(340:1.3) node[near end,right] {}; % normal force
+\draw[green, -latex] (center) -- ++(160:0.8) node[near end,above] {}; % friction
+
+\end{tikzpicture}
+\end{document}

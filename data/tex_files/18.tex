@@ -1,0 +1,16 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\begin{document}
+
+\begin{tikzpicture}[scale=1, auto,swap]
+    % draw the book
+    \draw (0,0) rectangle (1,2);
+
+    % draw the forces
+    \draw[-latex, blue]  (.5,1) -- (.5,0) node[midway,left] {};  % gravity
+    \draw[-latex, red]   (.5,1) -- (.5,2) node[midway,right] {}; % normal force
+    \draw[-latex, green] (.5,1) -- (1.5,1) node[midway,above] {}; % friction
+
+\end{tikzpicture}
+
+\end{document}

@@ -1,0 +1,25 @@
+\documentclass{standalone}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}
+
+% Define angle for inclined plane
+\pgfmathsetmacro{\angle}{30}
+
+% Draw the inclined plane
+\draw[thick] (0,0) -- (\angle:5);
+
+% Place the ball on the plane
+\node[circle,fill,inner sep=2pt,label={above right:$Ball$}] (Ball) at (\angle:3) {};
+
+% Draw the forces
+% Gravitational force
+\draw[->,thick,blue] (Ball) -- ++(270:2) node[below] {$F_g$};
+% Normal force
+\draw[->,thick,red] (Ball) -- ++(\angle+90:2) node[above left] {$F_N$};
+% Frictional force
+\draw[->,thick,green] (Ball) -- ++(\angle-180:1.5) node[below left] {$F_f$};
+
+\end{tikzpicture}
+\end{document}

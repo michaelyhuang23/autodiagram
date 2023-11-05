@@ -1,0 +1,19 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\begin{document}
+\begin{tikzpicture}
+    % Creating the inclined plane
+    \draw[thick] (0,0) -- (4,2.3);
+
+    % Creating the block
+    \fill[black] (2,1.135) rectangle (2.2,1.33);
+    
+    % Gravity (straight down)
+    \draw[-stealth,thick,blue] (2.1,1.2325) -- (2.1,0.9325);
+    
+    % Normal Force (perpendicular to inclined plane)
+    \draw[-stealth,thick,red] (2.1,1.2325) -- (2.6,1.7325);
+   
+    % Friction (along the plane upwards) 
+    \draw[-stealth,thick,green] (2.1,1.2325) -- (1.6,1.7325);
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,18 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}
+
+% Draw the inclined plane
+\draw[thick] (-3,0) -- (3,0);
+\draw[thick, rotate=30] (-3,0) -- (3,0);
+
+% Draw the object
+\fill (0,0.5) circle (0.1);
+
+% Draw the forces
+\draw[->, red, thick] (0,0.5) -- +(0,-2) node[below] {Gravitational Force};
+\draw[->, blue, thick] (0,0.5) -- +(-0.87,1) node[above] {Normal Force};
+
+\end{tikzpicture}
+\end{document}

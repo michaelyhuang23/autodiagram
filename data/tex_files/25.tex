@@ -1,0 +1,24 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}
+
+% Define block and plane
+\coordinate (O) at (0,0);
+\draw[thick] (O)--++(-45:3) coordinate (A);
+\draw[thick] (O)--(3,0) coordinate(B);
+\path (O)--++(-45:2) coordinate (M);
+
+% Define angle
+\path (B)--(O)--(A) pic ["$\theta$", draw, angle eccentricity=1.5] {angle = B--O--A};
+
+% Draw block
+\draw[fill=gray!30] (M) rectangle ++(0.5,0.5) coordinate[midway](C);
+
+% Draw forces
+\draw[red,-latex] (C)--++(90:1) node[above]{$N$};
+\draw[blue,-latex] (C)--++(-45:1) node[right] {$mg$};
+\draw[green!50!black,-latex] (C)--++(180:1) node[left]{$f$};
+
+\end{tikzpicture}
+\end{document}

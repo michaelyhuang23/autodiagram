@@ -1,0 +1,24 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usepackage{tikz}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+% Describe the inclined plane
+\draw[thick] (0,0) -- (4,2);
+
+% Describe the box
+\draw (2,1.5) rectangle +(0.5,0.5);
+
+% Arrows for the forces
+% Normal force
+\draw[->,thick,blue] (2.25,1.75) -- (1.25,2.25);
+% Gravitational force
+\draw[->,thick,red] (2.25,1.75) -- (2.25,0.75);
+% Frictional force
+\draw[->,thick,green] (2.25,1.75) -- (3.25,2.25);
+
+\end{tikzpicture}
+  
+\end{document}

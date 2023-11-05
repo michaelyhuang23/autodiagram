@@ -1,0 +1,22 @@
+\documentclass[tikz,border=2mm]{standalone}
+
+\begin{document}
+\begin{tikzpicture}
+
+% Draw the inclined plane
+\draw (0,0) -- (4,0) -- (2,2) -- cycle;
+
+% Draw the sphere
+\draw (1.5,1.5) circle (0.3);
+
+% Draw the gravitational force
+\draw[-stealth] (1.5,1.5) --+ (0,-1);
+
+% Draw the normal force
+\draw[-stealth] (1.5,1.5) --+ (45:1);
+
+% Draw the frictional force
+\draw[-stealth] (1.5,1.5) --+ (135:1);
+
+\end{tikzpicture}
+\end{document}

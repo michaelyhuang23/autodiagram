@@ -1,0 +1,21 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usepackage{tikz-3dplot}
+
+\begin{document}
+
+\tdplotsetmaincoords{70}{120}
+
+\begin{tikzpicture}[tdplot_main_coords,scale=1,line join=round]
+\begin{scope}
+    \draw[fill=gray!30] (-2,-1,0) -- (2,-1,0) -- (2,1,0) -- (-2,1,0) -- cycle;
+    \node at (0,0,1) [circle,fill,inner sep=1pt]{};
+\end{scope}
+
+\begin{scope}[canvas is yz plane at x=0]
+    \draw[-stealth,line width=1mm] (0,0) -- (0,-2) node[midway,right] {}; 
+    \draw[-stealth,line width=1mm] (0,0) -- (0,2)  node[midway,left]  {}; 
+    \draw[-stealth,line width=1mm] (0,0) -- (2,0)  node[midway,above] {};
+\end{scope}
+\end{tikzpicture}
+
+\end{document}

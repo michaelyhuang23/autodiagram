@@ -1,0 +1,25 @@
+\documentclass[tikz,border=2mm]{standalone}
+\usepackage{tikz}
+
+\begin{document}
+
+\begin{tikzpicture}{->,>=stealth',shorten >=1pt,auto,node distance=2.0cm,semithick}
+    
+    % Draw the inclined plane
+    \draw[very thick] (0,0) -- (3,0) -- (3,2) -- cycle;
+    
+    % Draw the box
+    \draw[fill=gray] (2,0.5) rectangle (2.5,1);
+    
+    % Draw the weight
+    \draw[red,thick,-stealth] (2.25,0.75) -- (2.25,-1);
+    
+    % Draw the normal force
+    \draw[blue,thick,-stealth] (2.25,0.75) -- (3.25,1.75);
+    
+    % Draw the Friction
+    \draw[green,thick,-stealth] (2.25,0.75) -- (1.25,0.75);
+    
+\end{tikzpicture}
+
+\end{document}
