@@ -1,0 +1,21 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\begin{document}
+\begin{tikzpicture}
+    % Draw the inclined plane
+    \draw[thick] (0,0) -- (4,0) -- (4,2) -- cycle;
+    
+    % Draw the box
+    \draw[fill=gray!30] (2,1) rectangle ++(0.5,0.5);
+    
+    % Coordinates for forces
+    \coordinate (A) at (2.25,1.25);
+    \coordinate (B) at ($(A)!1cm!90:(4,2)$);
+    \coordinate (C) at ($(A)!1cm!-90:(4,0)$);
+    \coordinate (D) at ($(A)!1cm!0:(4,0)$);
+    
+    % Draw vectors for forces
+    \draw[-latex,red] (A) -- (B) node[midway,left] {Normal Force};
+    \draw[-latex,blue] (A) -- (C) node[midway,right] {Weight};
+    \draw[-latex,green] (A) -- (D) node[midway,above] {Friction};
+\end{tikzpicture}
+\end{document}

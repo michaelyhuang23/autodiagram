@@ -11,6 +11,7 @@ tikzBotInstruction = "You are an AI assistant that generates TikZ codes. You wil
 tikzBot = GPTBot(tikzBotInstruction, auto_regressive=False)
 
 df = pd.DataFrame(columns=['idea', 'response'])
+tex_dir = 'data/tex_files/'
 ideas = []
 tikzcodes = []
 for i in range(100):
@@ -19,6 +20,9 @@ for i in range(100):
     startIdx = completion.find('\documentclass')
     endIdx = completion.find('\end{document}') + len('\end{document}')
     completion = completion[startIdx:endIdx]
+    print(completion)
+    with open(tex_dir + f'{i}.tex', 'w') as f:
+        f.write(completion)
     ideas.append(idea)
     tikzcodes.append(completion)
 
