@@ -1,0 +1,25 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usepackage{tikz}
+\begin{document}
+
+\begin{tikzpicture}
+   % Define the angle of inclination
+   \def\angle{30} 
+
+   % Draw the inclined plane
+   \draw[thick] (0,0) -- (\angle:4);
+
+   % Draw the block
+   \filldraw[thick,fill=blue!20] (1,\angle:1) rectangle (2,\angle:2);
+
+   % Draw the forces
+   \draw[thick,->,red,cap=round] (1.5,{sin(\angle)}) -- +(270:1) node[below] {Weight}; % weight
+   \draw[thick,->,blue,cap=round] (1.5,{sin(\angle)}) -- +(\angle:1) node[above right] {Normal force}; % normal force
+   \draw[thick,->,green!60!black,cap=round] (1.5,{sin(\angle)}) -- +(180:1) node[above left] {Friction}; % friction
+   
+   % Draw angle
+   \draw (0.5,0) arc (0:\angle:0.5);
+   \node at (\angle/2:0.7) {$\theta$};
+\end{tikzpicture}
+
+\end{document}

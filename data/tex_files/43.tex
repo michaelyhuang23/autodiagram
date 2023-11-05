@@ -1,0 +1,22 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\begin{document}
+\begin{tikzpicture}
+
+% Draw the ground (surface)
+\draw[line width=0.5mm] (-1,0) -- (5,3);
+
+% Draw the car as a rectangle
+\draw (1,0.8) rectangle (2,1.2);
+
+% Draw the forces
+% Engine force
+\draw[->, red, ultra thick] (1.5,1) -- (2.5,1.5);
+% Frictional force
+\draw[->, blue, ultra thick] (2,1.2) -- (1,0.5);
+% Gravitational force
+\draw[->, black, ultra thick] (1.5,1) -- (1.5,-0.5);
+% Normal force
+\draw[->, green, ultra thick] (1.5,1) -- (1.1,2);
+
+\end{tikzpicture}
+\end{document}

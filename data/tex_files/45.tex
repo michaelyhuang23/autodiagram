@@ -1,0 +1,25 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usepackage{tikz}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+%Drawing the inclined plane
+\draw (0,0) -- (3,0) -- (0,2) -- cycle;
+
+%Drawing the block
+\draw[fill=gray!20] (1,0.6) rectangle (1.4,1);
+
+%Gravity
+\draw[red,->,thick] (1.2,0.8) -- +(0,-1);
+
+%Normal force
+\draw[green,->,thick] (1.2,0.8) -- +(0.6,0.8);
+
+%Force of friction
+\draw[blue,->,thick] (1.2,0.8) -- +(-0.6,-0.2);
+
+\end{tikzpicture}
+
+\end{document}
