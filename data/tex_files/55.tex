@@ -1,0 +1,15 @@
+\documentclass[tikz,border=5mm]{standalone}
+\begin{document}
+\begin{tikzpicture}
+% Define the block
+\draw[fill=gray!30] (-1,-1) rectangle (1,1);
+% Draw the ground
+\draw[thick] (-2,-1.2) -- (2,-1.2);
+
+% Forces
+\draw[thick,red,->] (0,0) -- (0,-2); % Weight
+\draw[thick,green,->] (0,0) -- (0,2); % Normal
+\draw[thick,blue,->] (0,0) -- (-2,0); % Friction
+\draw[thick,purple,->] (0,0) -- (1.414, 1.414); % Applied force at 45 degrees
+\end{tikzpicture}
+\end{document}

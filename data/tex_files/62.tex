@@ -1,0 +1,28 @@
+\documentclass[tikz,margin=10pt]{standalone}
+\usepackage{tikz}
+
+\begin{document}
+
+\begin{tikzpicture}
+  % Draw the inclined plane
+  \draw[thick] (0,0) -- (4,0) -- (4,3);
+  \draw[dashed] (4,3) -- (0,3) -- (0,0);
+
+  % Draw the box on the plane
+  \draw[fill=gray!10] (3,2.25) rectangle (3.6,2.6); 
+
+  % Gravity
+  \draw[thick,->,blue] (3.3, 2.425) -- (3.3, 1.6);
+
+  % Normal force
+  \draw[thick,->,red] (3.6, 2.6) -- (4.3, 3.3);
+
+  % Friction 
+  \draw[thick,->,green] (3.3, 2.425) -- (2.5, 2.425);
+
+  % Angle
+  \draw[red] (4,0) -- (3.2,0) arc (180:143:0.8cm);
+
+\end{tikzpicture}
+
+\end{document}

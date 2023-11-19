@@ -1,0 +1,27 @@
+\documentclass[tikz]{standalone}
+\begin{document}
+\begin{tikzpicture}[>=stealth, force/.style={>=stealth,draw=blue,fill=blue, very thick, line cap=round}]
+   
+   % Define coordinates
+   \coordinate (O) at (0,0);
+   \coordinate (A) at ({sqrt(3)},1);
+   \coordinate (B) at ({sqrt(3)},0);
+   
+   % Draw inclined plane
+   \draw[thick] (O) -- (A) -- (B);
+   
+   % Draw box
+   \fill[pattern=north east lines] ($(A)!0.5!(B)$) rectangle ++(0.2, 0.2);
+   
+   % Define force coordinates
+   \coordinate (G) at ($($(A)!0.5!(B)$)+(0,-0.8)$);
+   \coordinate (N) at ($($(A)!0.5!(B)$)+(60:0.7)$);
+   \coordinate (F) at ($($(A)!0.5!(B)$)+(-30:0.5)$);
+   
+   % Draw forces
+   \draw[force,->] ($(A)!0.5!(B)$) -- (G) node[midway,right] {Gravity};
+   \draw[force,->] ($(A)!0.5!(B)$) -- (N) node[midway,above] {Normal};
+   \draw[force,->] ($(A)!0.5!(B)$) -- (F) node[midway,above] {Friction};
+   
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,22 @@
+\documentclass[tikz,border=2mm]{standalone}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}
+
+    % Define the angle of inclination
+    \def\angle{30}
+
+    % Draw the inclined plane
+    \draw[thick] (0,0) -- (5,0) -- (5*tan(\angle),5) -- cycle;
+
+    % Draw and label the object
+    \node[circle,fill=black,minimum size=1cm] at (2.5*tan(\angle),2.5) (object){};
+
+    % Draw force vectors and label them
+    \draw[thick,->,red] (object) -- +(90-\angle:2.5cm) node[midway,above] {Normal Force};
+    \draw[thick,->,blue] (object) -- ++(270:2.5cm) node[midway,right] {Gravitational Force};
+    \draw[thick,->,green] (object) -- ++(-90+\angle:2.5cm) node[midway,sloped,below] {Resultant Force};
+
+\end{tikzpicture}
+\end{document}

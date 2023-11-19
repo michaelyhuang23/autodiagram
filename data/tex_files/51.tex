@@ -1,0 +1,20 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows,calc}
+
+\begin{document}
+\begin{tikzpicture}
+
+% Inclined Plane
+\draw[very thick] (0,0) -- (4,2);
+
+% Box
+\draw[fill=gray!30] ($(1,0.5)+(45:0.5)$) rectangle ($(2.5,1)+(45:0.5)$);
+
+% Forces
+\draw[red,-Triangle] ($(2,1)+(45:0.5)$) -- ++(0,-2) node[midway,right] {}; % gravity
+\draw[blue,-Triangle] ($(2,1)+(45:0.5)$) -- ++(-45:1.5) node[midway,above] {}; % normal force
+\draw[green!50!black,-Triangle] ($(2,1)+(45:0.5)$) -- ++(45:1.5) node[midway,above] {}; % applied force
+
+\end{tikzpicture}
+\end{document}

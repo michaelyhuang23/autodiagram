@@ -1,0 +1,19 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+
+\begin{document}
+
+\begin{tikzpicture}
+    % Draw the box
+    \draw (0,0) rectangle (2,2);
+
+    % Draw the force of gravity
+    \draw[-latex] (1,0) -- (1,-1) node[midway,left] {gravity};
+
+    % Draw the normal force
+    \draw[-latex] (1,2) -- (1,3) node[midway,right] {normal};
+
+    % Draw the tension force
+    \draw[-latex] (2,1) -- (3,1) node[midway,above] {tension};
+\end{tikzpicture}
+
+\end{document}

@@ -1,0 +1,15 @@
+\documentclass[tikz,border=2mm]{standalone}
+\begin{document}
+\begin{tikzpicture}
+ % inclined plane
+ \draw[thick] (0,0) -- (4,2) -- (4,0) -- cycle;
+
+ % object
+ \filldraw[fill=gray!20] (2.5,1.25) rectangle (3,1.5);
+   
+ % forces
+ \draw[thick,->] (2.75,1.375) -- ++(0,-1) ; % gravity
+ \draw[thick,->] (2.75,1.375) -- ++(-.707,.707) ; % normal
+ \draw[thick,->] (2.75,1.375) -- ++(.707,-.707) ; % friction
+ \end{tikzpicture}
+\end{document}

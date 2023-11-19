@@ -1,0 +1,23 @@
+\documentclass[tikz, border=1mm]{standalone}
+\usepackage{tikz} 
+
+\begin{document}
+\begin{tikzpicture}
+
+% Draw the incline
+\draw[thick] (0,0) -- (30:6cm);
+% Marks the 30 degree angle
+\draw (1,0) arc (0:30:1cm);
+\node at (0.7,0.3) {$30^\circ$};
+
+% Draw the box
+\draw[thick] (30:3cm) rectangle ++(1,1);
+
+% Force vectors
+\coordinate (center) at ($(30:3cm)+(0.5,0.5)$);
+\draw[thick,->] (center) -- ++(-90:2cm) node[midway,left] {Gravity};
+\draw[thick,->] (center) -- ++(60:1.5cm) node[midway,above] {Normal};
+\draw[thick,->] (center) -- ++(210:1cm) node[midway,above] {Friction};
+
+\end{tikzpicture}
+\end{document}

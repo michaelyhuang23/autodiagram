@@ -1,0 +1,16 @@
+\documentclass[tikz,border=3mm]{standalone}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}
+
+    % Draw the sphere
+    \shade[ball color = gray!40, opacity = 0.4] (0,0) circle (1cm);
+
+    % Draw forces
+    \draw[-latex, thick, red] (0,0) -- (0, -1.5) node[below] {Gravity};
+    \draw[-latex, thick, blue] (0,0) -- (0, 1.5) node[above] {Normal force};
+    \draw[-latex, thick, green] (0,0) -- (-1.5, 0) node[left] {Friction};
+
+\end{tikzpicture}
+\end{document}
