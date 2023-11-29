@@ -6,7 +6,7 @@ build_dir = '../data/build_files'
 
 texbot = TexBot()
 
-for i in range(50):
+for i in range(10*1000):
     tex = texbot.gen_completion(i)
     print(tex)
     print()
