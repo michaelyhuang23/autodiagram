@@ -1,6 +1,7 @@
 import torch
 import cv2
 import os
+import numpy as np
 
 class RasterizedDataset(torch.utils.data.Dataset):
     def __init__(self, root_dir, num_samples, transform=None): 
@@ -15,18 +16,16 @@ class RasterizedDataset(torch.utils.data.Dataset):
                 self.labels.append(int(file.split('.')[0]))
         self.rasterized_data = torch.stack(self.rasterized_data)
         self.labels = torch.tensor(self.labels).long()
-        self.
+        self.sample_idx = np.random.choice(len(self.rasterized_data), num_samples, replace=True)
         self.num_samples = num_samples
+        self.transform = transform
 
     def __len__(self):
         return self.num_samples
 
-    def __getitem__(self, idx):
-
-
+    def __getitem__(self, i):
+        idx = self.sample_idx[i]
         sample = (self.rasterized_data[idx], self.labels[idx])
-
         if self.transform:
             sample = self.transform(sample)
-
         return sample
