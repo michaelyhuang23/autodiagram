@@ -9,14 +9,21 @@ config = VisionEncoderDecoderConfig.from_pretrained("facebook/nougat-base")
 config.encoder.image_size = image_size
 config.decoder.max_length = max_length
 processor = DonutProcessor.from_pretrained("facebook/nougat-base")
+#processor = DonutProcessor.from_pretrained("naver-clova-ix/donut-base-finetuned-docvqa")
 model = VisionEncoderDecoderModel.from_pretrained("lightning_logs/version_0/checkpoints/final.ckpt", config=config)
 #model = VisionEncoderDecoderModel.from_pretrained("facebook/nougat-base", config=config)
+#model = VisionEncoderDecoderModel.from_pretrained("naver-clova-ix/donut-base-finetuned-docvqa")
 dataset = load_dataset("Alchemy5/autodiagram", split="validation")
+#dataset = load_dataset("hf-internal-testing/example-documents", split="test")
 image = dataset["images"][0]
+#image = dataset[0]["image"]
 pixel_values = processor(image, return_tensors="pt").pixel_values
 print(pixel_values.shape)
+task_prompt = "{user_input}"
+question = "Convert this image into tex."
+#question = "When is the coffee break?"
+prompt = task_prompt.replace("{user_input}", question)
 
-prompt = "Convert this image into tex."
 decoder_input_ids = processor.tokenizer(prompt, add_special_tokens=False, return_tensors="pt")["input_ids"]
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
