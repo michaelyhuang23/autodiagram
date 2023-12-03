@@ -1,1 +1,3 @@
 .env
+synthetic_generation/data/*
+synthetic_generation/data2/*

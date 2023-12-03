@@ -12,7 +12,8 @@ class RasterizedDataset(torch.utils.data.Dataset):
                 img = cv2.imread(os.path.join(root_dir, file))
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 img = cv2.resize(img, (32, 32))
-                self.rasterized_data.append(torch.tensor(img).float())
+                print(img.shape)
+                self.rasterized_data.append(torch.tensor(img, dtype=torch.float32)[None,...])
                 self.labels.append(int(file.split('.')[0]))
         self.rasterized_data = torch.stack(self.rasterized_data)
         self.labels = torch.tensor(self.labels).long()
@@ -25,7 +26,9 @@ class RasterizedDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, i):
         idx = self.sample_idx[i]
-        sample = (self.rasterized_data[idx], self.labels[idx])
         if self.transform:
-            sample = self.transform(sample)
+            sample = (self.transform(self.rasterized_data[idx]), self.labels[idx])
+        else:
+            sample = (self.rasterized_data[idx], self.labels[idx])
+        assert(sample[0].shape == (1, 32, 32))
         return sample

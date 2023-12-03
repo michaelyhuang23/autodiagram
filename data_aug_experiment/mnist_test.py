@@ -6,32 +6,40 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, TensorDataset
 import cv2
 import numpy as np
+from vector_dataset import RasterizedDataset
+from augmentations import vert_curve_image_raw, hori_curve_image_raw
 
-transform = transforms.Compose([transforms.ToTensor(),
-                                transforms.Normalize((0.5,), (0.5,))])
+def display_img(img):
+    img = img.permute(1, 2, 0)  # Change from CxHxW to HxWxC
+    img = img.numpy()  # Convert to a NumPy array
+    img = (img * 255).astype('uint8')  # Rescale to [0, 255]
+    # Display the image using OpenCV
+    cv2.imshow('Image', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
-def gen_data(train_dir, num_samples):
-    labels = torch.from_numpy(np.random.randint(0, 10, num_samples))
-    for i in range(num_samples):
-        img = cv2.cvtColor(cv2.imread(f'{train_dir}/{labels[i].item()}.png'), cv2.COLOR_BGR2GRAY)
-        img = cv2.resize(img, (32, 32))
-        yield torch.tensor(img).float(), labels[i]
+# transforms.RandomResizedCrop((32,32)), 
+augmentations = [transforms.Lambda(lambda x : vert_curve_image_raw(x, 0.05)),
+                 transforms.Lambda(lambda x : hori_curve_image_raw(x, 0.05)),
+                 transforms.RandomRotation(10)]
 
-train_imgs = []
-for i in range(10):
-    img = cv2.cvtColor(cv2.imread(f'data/train/{i}.png'), cv2.COLOR_BGR2GRAY)
-    img = cv2.resize(img, (32, 32))
-    train_imgs.append(torch.tensor(img).float())
-train_imgs = torch.stack(train_imgs)
-train_labels = torch.tensor([i for i in range(10)]).long()
+test_transform = transforms.Compose([transforms.ToTensor(), transforms.Resize((32,32))])
 
-trainset = TensorDataset(train_imgs, train_labels)
+train_transform = transforms.Compose([transforms.Normalize((0), (255)), transforms.RandomApply(augmentations, p=1)])
+
+
+trainset = RasterizedDataset('data/train', 100000, train_transform)
 
 trainloader = DataLoader(trainset, batch_size=64, shuffle=True)
 
 testset = torchvision.datasets.MNIST(root='./data', train=False,
-                                     download=True, transform=transform)
+                                     download=True, transform=test_transform)
+
 testloader = DataLoader(testset, batch_size=64, shuffle=False)
+
+# display_img(trainset[2][0])
+# display_img(testset[2][0])
+
 
 
 class VanillaCNN(nn.Module):
@@ -39,7 +47,7 @@ class VanillaCNN(nn.Module):
         super(VanillaCNN, self).__init__()
         self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
-        self.fc1 = nn.Linear(64 * 7 * 7, 1000)
+        self.fc1 = nn.Linear(64 * 8 * 8, 1000)
         self.fc2 = nn.Linear(1000, 10)
         self.pool = nn.MaxPool2d(2, 2)
         self.relu = nn.ReLU()
@@ -56,36 +64,33 @@ net = VanillaCNN()
 
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(net.parameters(), lr=0.001)
+optimizer = optim.Adam(net.parameters(), lr=0.003)
 
-for epoch in range(10):  # loop over the dataset multiple times
+running_loss = 0.0
+print(len(trainloader))
+for i, data in enumerate(trainloader):
+    inputs, labels = data
 
-    running_loss = 0.0
-    for i, data in enumerate(trainloader, 0):
-        inputs, labels = data
+    optimizer.zero_grad()
 
-        optimizer.zero_grad()
+    outputs = net(inputs)
+    loss = criterion(outputs, labels)
+    loss.backward()
+    optimizer.step()
 
-        outputs = net(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
+    running_loss += loss.item()
+    if i % 20 == 19:    # print every 100 mini-batches
+        print(f"{i} loss: {running_loss / 100:.3f}")
+        running_loss = 0.0
 
-        running_loss += loss.item()
-        if i % 100 == 99:    # print every 100 mini-batches
-            print(f"[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 100:.3f}")
-            running_loss = 0.0
+        total, correct = 0, 0
+        with torch.no_grad():
+            for data in testloader:
+                inputs, labels = data
+                outputs = net(inputs)
+                _, predicted = torch.max(outputs.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+        print(f'{i} acc: ', correct/total)
 
-print('Finished Training')
 
-correct = 0
-total = 0
-with torch.no_grad():
-    for data in testloader:
-        images, labels = data
-        outputs = net(images)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
-
-print(f'Accuracy of the network on the 10000 test images: {100 * correct // total} %')

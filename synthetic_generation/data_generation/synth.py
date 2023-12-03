@@ -1,8 +1,8 @@
 import os
 from random_tex_bot import TexBot
 
-tex_dir = '../data/tex_files'
-build_dir = '../data/build_files'
+tex_dir = '../data2/tex_files'
+build_dir = '../data2/build_files'
 
 texbot = TexBot()
 
