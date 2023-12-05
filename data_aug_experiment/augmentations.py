@@ -52,8 +52,8 @@ def curve_line(start, end, line_thickness, img_shape, amp=0.05, fill=1.0):
     curveh = get_random_curve(amp)
     img = np.ones(img_shape, np.float32) #img = torch.from_numpy(np.zeros(img_shape, np.float32))
     img = cv2.line(img, start, end, 0.0, line_thickness)
-    width = abs(end[0] - start[0] + 1)
-    height = abs(end[1] - start[1] + 1)
+    width = abs(end[0] - start[0]) + 1
+    height = abs(end[1] - start[1]) + 1
     length = (width**2 + height**2 + 0.000001) ** 0.5
     thickness = 0
     for x in range(start[0], end[0]+1):
