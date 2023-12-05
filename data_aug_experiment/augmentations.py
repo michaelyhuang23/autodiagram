@@ -57,7 +57,7 @@ def curve_line(start, end, line_thickness, img_shape, amp=0.05, fill=1.0):
     length = (width**2 + height**2 + 0.000001) ** 0.5
     thickness = 0
     for x in range(start[0], end[0]+1):
-        roll_val = int(torch.clamp(torch.tensor(curvev(x / width)), -0.2, 0.2) * length)
+        roll_val = int(torch.clamp(torch.tensor(curvev(x / width)), -0.2, 0.2) * (40+length))
         img[:, x] = torch.roll(torch.from_numpy(img[:, x]), roll_val)
         if roll_val < 0:
             img[roll_val:, x] = fill
@@ -65,6 +65,7 @@ def curve_line(start, end, line_thickness, img_shape, amp=0.05, fill=1.0):
             img[:roll_val, x] = fill
 
         y = (end[1] - start[1])/(end[0] - start[0] + 0.001) * (x - start[0]) + start[1] 
+<<<<<<< HEAD
         # print(x, y)
         y += roll_val
         deltax = int(torch.clamp(torch.tensor(curveh(y / height)), -0.2, 0.2) * length)
@@ -72,10 +73,16 @@ def curve_line(start, end, line_thickness, img_shape, amp=0.05, fill=1.0):
         nx = x + deltax
         d = point_line_distance(start, end, np.array([nx, y]))
         # print(d)
+=======
+        y += roll_val
+        deltax = int(torch.clamp(torch.tensor(curveh(y / height)), -0.2, 0.2) * length)
+        nx = x + deltax
+        d = point_line_distance(start, end, np.array([nx, y]))
+>>>>>>> bd505cfb (aug)
         thickness = max(thickness, 2*d)
 
     for y in range(start[1], end[1]+1):
-        roll_val = int(torch.clamp(torch.tensor(curveh(y / height)), -0.2, 0.2) * length)
+        roll_val = int(torch.clamp(torch.tensor(curveh(y / height)), -0.2, 0.2) * (40+length))
         img[y, :] = torch.roll(torch.from_numpy(img[y, :]), roll_val)
         if roll_val < 0:
             img[y, roll_val:] = fill
