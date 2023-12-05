@@ -34,21 +34,22 @@ def sort_point_pairs_by_distance(point_pairs):
 def generate_points(num_lines, num_rect=0, num_tri=0):
     points = []
 
-    num_rectangles = random.randint(0,1)
+    num_actual_lines = 0
+    num_rectangles = 2
+    num_actual_lines += 4 * num_rectangles
     for j in range(num_rectangles):
         print("rectangle")
         start_point = (random.randint(0, width-1), random.randint(0, height-1))
         end_point = (random.randint(0, width-1), random.randint(0, height-1))
 
         projection1 = (start_point[0], end_point[1])
-        projection2 = (start_point[1], end_point[0])
+        projection2 = (end_point[0], start_point[1])
         
         points.append([start_point, projection1])
         points.append([start_point, projection2])
         points.append([end_point, projection1])
         points.append([end_point, projection2])
 
-    num_lines -= 2 * num_rectangles
 
     for j in range(num_lines_to_draw):
         # Draw a line by defining the two endpoints. 
@@ -56,10 +57,12 @@ def generate_points(num_lines, num_rect=0, num_tri=0):
         end_point = (random.randint(0, width-1), random.randint(0, height-1))
         points.append([start_point, end_point])
     
+    num_actual_lines += num_lines_to_draw
+    
 
     # Sort the lines based on length:
     points = sort_point_pairs_by_distance(points)
-    return points
+    return points, num_actual_lines
 
 
 # Image dimensions and line parameters
@@ -69,14 +72,14 @@ with open("line_coords_training.txt", "w") as f:
     num_data_points = 1
     for i in range(num_data_points):
         #Generate the points
-        num_lines_to_draw = random.randint(1,5)
-        points = generate_points(num_lines_to_draw)
+        num_lines_to_draw = random.randint(1,3)
+        points,num_lines = generate_points(num_lines_to_draw)
 
         # Create a blank image
         image = np.ones((width, height), np.float32)
 
         # Iteratively add the necessary lines
-        for j in range(num_lines_to_draw):
+        for j in range(num_lines):
             line_thickness = 2
 
             # Call data augmentation function which returns curved line
@@ -100,5 +103,7 @@ with open("line_coords_training.txt", "w") as f:
 # - (done) make the lines increase in size
 # - (done) figure out how to call michael's data aug
 # - (done) set up the folder for saving the images
-# - add polygons
+# - (done) add rectangle
+# - add triangle
+# make rectangle straighter?
 
