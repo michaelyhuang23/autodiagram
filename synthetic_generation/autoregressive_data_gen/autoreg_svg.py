@@ -33,9 +33,9 @@ def sort_point_pairs_by_distance(point_pairs):
 
 def generate_points(num_lines, num_rect=0, num_tri=0):
     points = []
-
     num_actual_lines = 0
-    num_rectangles = 2
+
+    num_rectangles = random.randint(0,2)
     num_actual_lines += 4 * num_rectangles
     for j in range(num_rectangles):
         print("rectangle")
@@ -69,7 +69,7 @@ def generate_points(num_lines, num_rect=0, num_tri=0):
 width, height = 224, 224
 
 with open("line_coords_training.txt", "w") as f:
-    num_data_points = 1
+    num_data_points = 1000
     for i in range(num_data_points):
         #Generate the points
         num_lines_to_draw = random.randint(1,3)
