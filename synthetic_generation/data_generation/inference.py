@@ -10,7 +10,7 @@ def inference_line(model, img):
     if np.linalg.norm(end - start) < 0.05 * img_dim:
         return None, None
     line_img = np.zeros(img.shape, dtype=np.float32)
-    line_img = cv2.line(line_img, start, end, 1.0, thickness)
+    line_img = cv2.line(line_img, start, end, 1.0, thickness + 2)
     return (start, end, thickness), np.clip(img + line_img, 0, 1)
 
 
