@@ -47,11 +47,11 @@ def point_line_distance(start, end, point):
     return distance
 
 
-def curve_line(start, end, thickness, img_shape, amp=0.05, fill=1.0):
+def curve_line(start, end, line_thickness, img_shape, amp=0.05, fill=1.0):
     curvev = get_random_curve(amp)
     curveh = get_random_curve(amp)
     img = np.ones(img_shape, np.float32) #img = torch.from_numpy(np.zeros(img_shape, np.float32))
-    img = cv2.line(img, start, end, 0.0, thickness)
+    img = cv2.line(img, start, end, 0.0, line_thickness)
     width = abs(end[0] - start[0] + 1)
     height = abs(end[1] - start[1] + 1)
     length = (width**2 + height**2 + 0.000001) ** 0.5
@@ -64,10 +64,14 @@ def curve_line(start, end, thickness, img_shape, amp=0.05, fill=1.0):
         else:
             img[:roll_val, x] = fill
 
-        y = (end[1] - start[1])/(end[0] - start[0] + 0.001) * (x - start[0]) + start[1] + roll_val
+        y = (end[1] - start[1])/(end[0] - start[0] + 0.001) * (x - start[0]) + start[1] 
+        print(x, y)
+        y += roll_val
         deltax = int(torch.clamp(torch.tensor(curveh(y / height)), -0.2, 0.2) * length)
+        print(deltax, roll_val)
         nx = x + deltax
         d = point_line_distance(start, end, np.array([nx, y]))
+        print(d)
         thickness = max(thickness, 2*d)
 
     for y in range(start[1], end[1]+1):
@@ -78,5 +82,6 @@ def curve_line(start, end, thickness, img_shape, amp=0.05, fill=1.0):
         else:
             img[y, :roll_val] = fill
 
-    return img, thickness
+    return img, thickness + line_thickness
+
 
