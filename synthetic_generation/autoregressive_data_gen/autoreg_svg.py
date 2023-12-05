@@ -20,12 +20,6 @@ import numpy as np
 sys.path.append('../../data_aug_experiment')
 from augmentations import curve_line
 
-# # Create a blank image
-# def create_blank_image(width, height, color=(255, 255, 255)):
-#     image = np.zeros((height, width, 3), np.uint8)
-#     image[:] = color
-#     return image
-
 # Draw a line on the image
 def draw_line(image, start_point, end_point, line_color=(0, 0, 0), line_thickness=2):
     cv2.line(image, start_point, end_point, line_color, line_thickness)
@@ -37,49 +31,65 @@ def sort_point_pairs_by_distance(point_pairs):
 
     return sorted(point_pairs, key=distance)
 
+def generate_points(num_lines, num_rect=0, num_tri=0):
+    points = []
+
+    num_rectangles = random.randint(0,1)
+    for j in range(num_rectangles):
+        print("rectangle")
+        start_point = (random.randint(0, width-1), random.randint(0, height-1))
+        end_point = (random.randint(0, width-1), random.randint(0, height-1))
+
+        projection1 = (start_point[0], end_point[1])
+        projection2 = (start_point[1], end_point[0])
+        
+        points.append([start_point, projection1])
+        points.append([start_point, projection2])
+        points.append([end_point, projection1])
+        points.append([end_point, projection2])
+
+    num_lines -= 2 * num_rectangles
+
+    for j in range(num_lines_to_draw):
+        # Draw a line by defining the two endpoints. 
+        start_point = (random.randint(0, width-1), random.randint(0, height-1))
+        end_point = (random.randint(0, width-1), random.randint(0, height-1))
+        points.append([start_point, end_point])
+    
+
+    # Sort the lines based on length:
+    points = sort_point_pairs_by_distance(points)
+    return points
+
+
 # Image dimensions and line parameters
 width, height = 224, 224
 
 with open("line_coords_training.txt", "w") as f:
-    num_data_points = 5
+    num_data_points = 1
     for i in range(num_data_points):
+        #Generate the points
         num_lines_to_draw = random.randint(1,5)
-        points = []
-
-        for j in range(num_lines_to_draw):
-            # Draw a line by defining the two endpoints. 
-            start_point = (random.randint(0, width), random.randint(0, height))
-            end_point = (random.randint(0, width), random.randint(0, height))
-            points.append([start_point, end_point])
-        
-        # Sort the lines based on length:
-        points = sort_point_pairs_by_distance(points)
-        print(points)
+        points = generate_points(num_lines_to_draw)
 
         # Create a blank image
         image = np.ones((width, height), np.float32)
 
         # Iteratively add the necessary lines
         for j in range(num_lines_to_draw):
-            line_color = (0, 0, 0)
             line_thickness = 2
 
             # Call data augmentation function which returns curved line
             additive_img, variance_width = curve_line(points[j][0], points[j][1], line_thickness, (224,224), amp=0.01)
             variance_width = round(variance_width,1)
-            # Record the thickness
             points[j].append(variance_width)
 
-            print("image and then additive image:")
-            print(image)
-            print(additive_img)
-            image = np.clip(image * additive_img,0,1)
             # draw_line(image, start_point, end_point, line_color, line_thickness)
+            image = np.clip(image * additive_img,0,1)
 
             # Save the image
             output_filename = f'imgfiles/line_drawing_test_{i}-{j}.jpg'
             cv2.imwrite(output_filename, np.round(image*255))
-        
         
         # Write the idealized data onto the text file
         for point in reversed(points):

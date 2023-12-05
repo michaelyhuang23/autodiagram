@@ -65,13 +65,13 @@ def curve_line(start, end, line_thickness, img_shape, amp=0.05, fill=1.0):
             img[:roll_val, x] = fill
 
         y = (end[1] - start[1])/(end[0] - start[0] + 0.001) * (x - start[0]) + start[1] 
-        print(x, y)
+        # print(x, y)
         y += roll_val
         deltax = int(torch.clamp(torch.tensor(curveh(y / height)), -0.2, 0.2) * length)
-        print(deltax, roll_val)
+        # print(deltax, roll_val)
         nx = x + deltax
         d = point_line_distance(start, end, np.array([nx, y]))
-        print(d)
+        # print(d)
         thickness = max(thickness, 2*d)
 
     for y in range(start[1], end[1]+1):
