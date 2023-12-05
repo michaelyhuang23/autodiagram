@@ -5,7 +5,7 @@ import cv2
 # define a bunch of augmentations (either take in rasterized image or vectorized image)
 
 def get_random_curve(amp):
-    freqs = np.random.uniform(0.64, 50, 10)
+    freqs = np.random.uniform(0.64, 20, 10)
     amps = np.random.uniform(-1, 1, 10) * amp 
     return lambda x: np.sum([amp * np.sin(freq * x) for freq, amp in zip(freqs, amps)])
 
@@ -47,24 +47,24 @@ def point_line_distance(start, end, point):
     return distance
 
 
-def curve_line(start, end, thickness, img_shape, amp=0.05, fill=0):
+def curve_line(start, end, thickness, img_shape, amp=0.05, fill=1.0):
     curvev = get_random_curve(amp)
     curveh = get_random_curve(amp)
-    img = np.zeros(img_shape, np.float32)
-    img = cv2.line(img, start, end, 1, thickness)
+    img = np.ones(img_shape, np.float32) #img = torch.from_numpy(np.zeros(img_shape, np.float32))
+    img = cv2.line(img, start, end, 0.0, thickness)
     width = abs(end[0] - start[0] + 1)
     height = abs(end[1] - start[1] + 1)
     length = (width**2 + height**2 + 0.000001) ** 0.5
     thickness = 0
     for x in range(start[0], end[0]+1):
         roll_val = int(torch.clamp(torch.tensor(curvev(x / width)), -0.2, 0.2) * length)
-        img[:, x] = torch.roll(img[:, x], roll_val)
+        img[:, x] = torch.roll(torch.from_numpy(img[:, x]), roll_val)
         if roll_val < 0:
             img[roll_val:, x] = fill
         else:
             img[:roll_val, x] = fill
 
-        y = (end[1] - start[1])/(end[0] - start[0]) * (x - start[0]) + start[1] + roll_val
+        y = (end[1] - start[1])/(end[0] - start[0] + 0.001) * (x - start[0]) + start[1] + roll_val
         deltax = int(torch.clamp(torch.tensor(curveh(y / height)), -0.2, 0.2) * length)
         nx = x + deltax
         d = point_line_distance(start, end, np.array([nx, y]))
@@ -72,7 +72,7 @@ def curve_line(start, end, thickness, img_shape, amp=0.05, fill=0):
 
     for y in range(start[1], end[1]+1):
         roll_val = int(torch.clamp(torch.tensor(curveh(y / height)), -0.2, 0.2) * length)
-        img[y, :] = torch.roll(img[y, :], roll_val)
+        img[y, :] = torch.roll(torch.from_numpy(img[y, :]), roll_val)
         if roll_val < 0:
             img[y, roll_val:] = fill
         else:
