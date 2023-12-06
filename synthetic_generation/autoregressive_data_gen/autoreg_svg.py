@@ -14,7 +14,7 @@
 #     - save the coordinates of the line
 #     - save a version of the rasterized svg file
 
-import cv2, random, sys, math, torch
+import cv2, random, sys, math, torch, pickle
 import numpy as np
 
 sys.path.append('../../data_aug_experiment')
@@ -33,15 +33,11 @@ def sort_point_pairs_by_distance(point_pairs):
 
 def generate_points(num_lines, num_rect=0, num_tri=0):
     points = []
-    num_actual_lines = 0
 
     num_rectangles = random.randint(0,2)
-    num_actual_lines += 4 * num_rectangles
     for j in range(num_rectangles):
-        print("rectangle")
         start_point = (random.randint(0, width-1), random.randint(0, height-1))
         end_point = (random.randint(0, width-1), random.randint(0, height-1))
-
         projection1 = (start_point[0], end_point[1])
         projection2 = (end_point[0], start_point[1])
         
@@ -50,29 +46,46 @@ def generate_points(num_lines, num_rect=0, num_tri=0):
         points.append([end_point, projection1])
         points.append([end_point, projection2])
 
+    num_triangles = random.randint(0,1)
+    for j in range(num_triangles):
+        pointA = (random.randint(0, width-1), random.randint(0, height-1))
+        pointB = (random.randint(0, width-1), random.randint(0, height-1))
+        pointC = (random.randint(0, width-1), random.randint(0, height-1))
+        
+        points.append([pointA, pointB])
+        points.append([pointA, pointC])
+        points.append([pointB, pointC])
 
-    for j in range(num_lines_to_draw):
+    num_single_line = max(num_lines - 2*num_rectangles - num_triangles,0)
+    for j in range(num_single_line):
         # Draw a line by defining the two endpoints. 
         start_point = (random.randint(0, width-1), random.randint(0, height-1))
         end_point = (random.randint(0, width-1), random.randint(0, height-1))
         points.append([start_point, end_point])
     
-    num_actual_lines += num_lines_to_draw
-    
-
     # Sort the lines based on length:
     points = sort_point_pairs_by_distance(points)
+    num_actual_lines = 4 * num_rectangles + 3 * num_triangles + num_single_line  
+
+    # print(f"rect,tri,single: {num_rectangles}, {num_triangles}, {num_single_line}")
+    # print(len(points))
+    # print(num_actual_lines)
+
     return points, num_actual_lines
 
 
 # Image dimensions and line parameters
-width, height = 224, 224
+width, height = 672, 896
 
-with open("line_coords_training.txt", "w") as f:
-    num_data_points = 1000
+with open("line_coords.pickle", "wb") as handle:
+    num_data_points = 10000
     for i in range(num_data_points):
+
+        if (i % 25 == 0):
+            print(i)
+
         #Generate the points
-        num_lines_to_draw = random.randint(1,3)
+        num_lines_to_draw = random.randint(1,5)
         points,num_lines = generate_points(num_lines_to_draw)
 
         # Create a blank image
@@ -96,8 +109,9 @@ with open("line_coords_training.txt", "w") as f:
         
         # Write the idealized data onto the text file
         for point in reversed(points):
-            f.write(str(point))
-        f.write("\n")
+            # f.write(str(point))
+            pickle.dump(point, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        # f.write("\n")
 
 #todo: 
 # - (done) make the lines increase in size
