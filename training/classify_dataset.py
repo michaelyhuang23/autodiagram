@@ -6,8 +6,6 @@ import os
 import io
 from PIL import Image
 import pickle
-import resource
-resource.setrlimit(resource.RLIMIT_NOFILE, (1000000,-1))
 
 class ClassifyDataset(Dataset):
     def __init__(self, root_dir):
