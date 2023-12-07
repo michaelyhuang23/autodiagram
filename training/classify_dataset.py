@@ -35,7 +35,8 @@ class ClassifyDataset(Dataset):
             label_path = os.path.join(labels_dir, f'{label_id}.pkl')
             with open(label_path, "rb") as openfile:
                 labels = pickle.load(openfile)
-            labels = [torch.tensor([label[2], *label[0], *label[1]]) for label in labels]
+            labels = [torch.tensor([label[2], *label[0], *label[1]]).float() for label in labels]
+            if img_seconds[label_id]+1 != len(labels): continue
             self.labels += labels
             for j in range(img_seconds[label_id]+1):
                 file_path = os.path.join(img_dir, f"{label_id}-{j}.jpg")
@@ -83,6 +84,3 @@ class ClassifyDataset(Dataset):
         image = self.images[int(index)]
         label = self.labels[int(index)]
         return image, label
-
-
-dataset = ClassifyDataset(root_dir='../data/detection_dataset')

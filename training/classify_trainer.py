@@ -19,14 +19,13 @@ from sklearn.model_selection import train_test_split
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 model = CustomNougatModel()
-dataset = ClassifyDataset(root_dir='../data/classification_dataset')
+dataset = ClassifyDataset(root_dir='../data/detection_dataset')
 config = AutoConfig.from_pretrained("facebook/nougat-base")
-print(config)
 
 train_dataset, val_dataset = train_test_split(dataset, test_size=0.2)
 
 train_dataloader = DataLoader(train_dataset, shuffle=True, batch_size=4)
-val_dataloader = DataLoader(val_dataset, shuffle=True, batch_size=4)
+val_dataloader = DataLoader(val_dataset, shuffle=False, batch_size=4)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 
@@ -39,6 +38,7 @@ for epoch in range(100):
     for idx, batch in enumerate(train_dataloader):
         pixel_values, labels = batch
         pixel_values = pixel_values.to(device)
+        pixel_values = torch.tile(pixel_values, (1, 3, 1, 1))
         labels = labels.to(device)
         outputs = model(pixel_values)
         loss = compute_loss(outputs, labels)
