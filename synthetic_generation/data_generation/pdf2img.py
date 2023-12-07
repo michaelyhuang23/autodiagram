@@ -7,9 +7,9 @@ from pdf2image.exceptions import (
     PDFSyntaxError
 )
 
-tex_dir = '../data2/tex_files'
-build_dir = '../data2/build_files'
-img_dir = '../data2/img_files'
+tex_dir = '../data3/tex_files'
+build_dir = '../data3/build_files'
+img_dir = '../data3/img_files'
 
 for file in os.listdir(build_dir):
     if not file.endswith('.pdf'): continue
