@@ -80,6 +80,7 @@ class ClassifyDataset(Dataset):
     def __getitem__(self, index):
         image_path = self.images[int(index)]
         image = Image.open(image_path).convert('RGB')
-        image = transforms.functional.to_tensor(image).float()
+        image_tensor = transforms.functional.to_tensor(image).float()
+        image.close()
         label = self.labels[int(index)]
-        return image, label
+        return image_tensor, label
