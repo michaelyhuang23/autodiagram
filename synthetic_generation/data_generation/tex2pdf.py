@@ -1,9 +1,9 @@
 import os
 from pdf2image.pdf2image import convert_from_path
 
-tex_dir = '../data/tex_files'
-build_dir = '../data/build_files'
-img_dir = '../data/img_files'
+tex_dir = '../data2/tex_files'
+build_dir = '../data2/build_files'
+img_dir = '../data2/img_files'
 
 for file in os.listdir(tex_dir):
     if not file.endswith('.tex'): continue

@@ -1,0 +1,2 @@
+/home/gridsan/yhuang1/autodiagram/synthetic_generation/autoregressive_data_gen
+/var/spool/slurmd/job24428356/slurm_script: line 9: module: command not found

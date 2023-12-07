@@ -13,7 +13,7 @@
 #     - get a rasterized version of the line/addition.svg
 #     - save the coordinates of the line
 #     - save a version of the rasterized svg file
-
+import threading
 import cv2, random, sys, math, torch, pickle
 import numpy as np
 
@@ -29,7 +29,7 @@ def sort_point_pairs_by_pair(point_pairs):
         (x0, y0), (x1, y1) = pair
         return min(y0, y1)*10000 + min(x0, x1) 
 
-    return reversed(sorted(point_pairs, key=pair_key))
+    return list(reversed(sorted(point_pairs, key=pair_key)))
 
 def generate_points(num_objs):
     points = []
@@ -67,43 +67,47 @@ def generate_points(num_objs):
     points = sort_point_pairs_by_pair(points)
     num_actual_lines = 4 * num_rectangles + 3 * num_triangles + num_single_line  
 
-    return points, num_actual_lines
+    points = [point for point in points if point[0][0]-point[1][0]!=0 or point[0][1]-point[1][1]!=0]
+    return points, len(points)
 
 
 # Image dimensions and line parameters
 width, height = 672, 896
 
 num_data_points = 10000
-all_points = []
-for i in range(num_data_points):
 
-    if (i % 25 == 0):
-        print(i)
+def gen_data_point(idx):
+    for t in range(100):
+        i = idx*100 + t
+        points,num_lines = generate_points(5)
 
-    #Generate the points
-    points,num_lines = generate_points(5)
+        # Create a blank image
+        image = np.ones((height, width), np.float32)
+        # Iteratively add the necessary lines
+        for j in range(num_lines):
+            line_thickness = 5
 
-    # Create a blank image
-    image = np.ones((height, width), np.float32)
-    # Iteratively add the necessary lines
-    for j in range(num_lines):
-        line_thickness = 5
+            # Call data augmentation function which returns curved line
+            additive_img, variance_width = curve_line(points[j][0], points[j][1], line_thickness, (height, width), amp=0.01)
+            points[j].append(variance_width)
 
-        # Call data augmentation function which returns curved line
-        additive_img, variance_width = curve_line(points[j][0], points[j][1], line_thickness, (height, width), amp=0.01)
-        points[j].append(variance_width)
+            # draw_line(image, start_point, end_point, line_color, line_thickness)
+            image = np.clip(image * additive_img,0,1)
 
-        # draw_line(image, start_point, end_point, line_color, line_thickness)
-        image = np.clip(image * additive_img,0,1)
+            # Save the image
+            output_filename = f'imgfiles2/{i}-{j}.jpg'
+            cv2.imwrite(output_filename, np.round(image*255))
+        with open(f"labels2/{i}.pkl", 'wb') as handle:
+            pickle.dump(points, handle)
+        
+threads = []
+for i in range(100):
+    thread = threading.Thread(target=gen_data_point, args=(i,))
+    thread.start()
+    threads.append(thread)
 
-        # Save the image
-        output_filename = f'imgfiles/{i}-{j}.jpg'
-        cv2.imwrite(output_filename, np.round(image*255))
-
-    all_points.append(points)
-
-with open("line_coords.pickle", "wb") as handle: 
-    pickle.dump(all_points, handle)
+for thread in threads:
+    thread.join()
 #todo: 
 # - (done) make the lines increase in size
 # - (done) figure out how to call michael's data aug

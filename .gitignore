@@ -1,5 +1,9 @@
 .env
 synthetic_generation/data/*
 synthetic_generation/data2/*
+synthetic_generation/autoregressive_data_gen/imgfiles/*
+synthetic_generation/autoregressive_data_gen/imgfiles2/*
+synthetic_generation/autoregressive_data_gen/labels/*
+synthetic_generation/autoregressive_data_gen/labels2/*
 data/*
 training/result/*
