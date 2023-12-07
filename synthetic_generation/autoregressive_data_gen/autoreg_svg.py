@@ -36,8 +36,8 @@ def generate_points(num_lines, num_rect=0, num_tri=0):
 
     num_rectangles = random.randint(0,2)
     for j in range(num_rectangles):
-        start_point = (random.randint(0, width-1), random.randint(0, height-1))
-        end_point = (random.randint(0, width-1), random.randint(0, height-1))
+        start_point = (random.randint(5, width-5), random.randint(5, height-5))
+        end_point = (random.randint(5, width-5), random.randint(5, height-5))
         projection1 = (start_point[0], end_point[1])
         projection2 = (end_point[0], start_point[1])
         
@@ -89,14 +89,14 @@ with open("line_coords.pickle", "wb") as handle:
         points,num_lines = generate_points(num_lines_to_draw)
 
         # Create a blank image
-        image = np.ones((width, height), np.float32)
+        image = np.ones((height, width), np.float32)
 
         # Iteratively add the necessary lines
         for j in range(num_lines):
-            line_thickness = 2
+            line_thickness = 5
 
             # Call data augmentation function which returns curved line
-            additive_img, variance_width = curve_line(points[j][0], points[j][1], line_thickness, (224,224), amp=0.01)
+            additive_img, variance_width = curve_line(points[j][0], points[j][1], line_thickness, (height, width), amp=0.01)
             variance_width = round(variance_width,1)
             points[j].append(variance_width)
 
