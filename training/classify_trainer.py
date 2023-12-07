@@ -33,7 +33,7 @@ model.train()
 print("Training...")
 
 for epoch in range(100):
-    torch.save(model.state_dict(), 'result/initial.pth')
+    torch.save(model.state_dict(), 'result2/initial.pth')
     print("Epoch:", epoch)
     for idx, batch in enumerate(data_loader):
         pixel_values, labels = batch
@@ -46,5 +46,5 @@ for epoch in range(100):
         optimizer.zero_grad()
         print(f"Epoch: {epoch}, Loss:", loss.cpu().item(), f"{idx+1}/{len(data_loader)}")
         if idx % 100 == 0:
-            torch.save(model.state_dict(), f'result/epoch{epoch}-{idx}.pth')
-    torch.save(model.state_dict(), f'result/epoch{epoch}.pth')
+            torch.save(model.state_dict(), f'result2/epoch{epoch}-{idx}.pth')
+    torch.save(model.state_dict(), f'result2/epoch{epoch}.pth')
