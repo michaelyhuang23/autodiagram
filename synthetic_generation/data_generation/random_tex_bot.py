@@ -71,7 +71,6 @@ class TexBot:
     def gen_completion(self, seed):
         head = r"""\documentclass[tikz,border=3mm]{standalone}
 \begin{document}
-\tikzset{every picture/.style={line width=4pt}}
 \begin{tikzpicture}
 """ 
         body = self.gen_main_body(seed)

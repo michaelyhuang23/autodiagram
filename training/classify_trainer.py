@@ -12,7 +12,7 @@ import sys
 sys.path.append('..')
 from models.custom_loss import compute_loss
 from models.nougat_classify import CustomNougatModel
-from training.dataset import ClassifyDataset
+from training.classify_dataset import ClassifyDataset
 from transformers import AutoConfig
 from sklearn.model_selection import train_test_split
 

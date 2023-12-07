@@ -1,12 +1,12 @@
 import os
 from random_tex_bot import TexBot
 
-tex_dir = '../data2/tex_files'
-build_dir = '../data2/build_files'
+tex_dir = '../data3/tex_files'
+build_dir = '../data3/build_files'
 
 texbot = TexBot()
 
-for i in range(10*1000):
+for i in range(10):
     tex = texbot.gen_completion(i)
     print(tex)
     print()
