@@ -1,9 +1,7 @@
 import torch
+from torch import nn
 import torch.nn.functional as F
-from PIL import Image
-from transformers import VisionEncoderDecoderConfig
-from transformers import DonutProcessor, VisionEncoderDecoderModel, BartConfig
-from datasets import load_dataset
+from transformers import VisionEncoderDecoderModel
 import torch
 
 
