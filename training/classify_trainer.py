@@ -14,28 +14,28 @@ from models.custom_loss import compute_loss
 from models.nougat_classify import CustomNougatModel
 from training.classify_dataset import ClassifyDataset
 from transformers import AutoConfig
-from sklearn.model_selection import train_test_split
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 model = CustomNougatModel()
 dataset = ClassifyDataset(root_dir='../data/detection_dataset')
-config = AutoConfig.from_pretrained("facebook/nougat-base")
+#config = AutoConfig.from_pretrained("facebook/nougat-base")
+print('done loading dataset')
 
-train_dataset, val_dataset = train_test_split(dataset, test_size=0.2)
+data_loader = DataLoader(dataset, batch_size=4, shuffle=True)
 
-train_dataloader = DataLoader(train_dataset, shuffle=True, batch_size=4)
-val_dataloader = DataLoader(val_dataset, shuffle=False, batch_size=4)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 
 model.to(device)
 model.train()
 
+print("Training...")
+
 for epoch in range(100):
     torch.save(model.state_dict(), 'result/initial.pth')
     print("Epoch:", epoch)
-    for idx, batch in enumerate(train_dataloader):
+    for idx, batch in enumerate(data_loader):
         pixel_values, labels = batch
         pixel_values = pixel_values.to(device)
         labels = labels.to(device)
@@ -44,5 +44,5 @@ for epoch in range(100):
         loss.backward()
         optimizer.step()
         optimizer.zero_grad()
-        print(f"Epoch: {epoch}, Loss:", loss.cpu().item(), f"{idx+1}/{len(train_dataloader)}")
+        print(f"Epoch: {epoch}, Loss:", loss.cpu().item(), f"{idx+1}/{len(data_loader)}")
     torch.save(model.state_dict(), f'result/epoch{epoch}.pth')

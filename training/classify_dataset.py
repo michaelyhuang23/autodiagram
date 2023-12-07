@@ -15,8 +15,8 @@ class ClassifyDataset(Dataset):
     def read_data(self, root_dir):
         self.labels = []
         self.images = []
-        img_dir = os.path.join(root_dir, "imgfiles")
-        labels_dir = os.path.join(root_dir, "labels")
+        img_dir = os.path.join(root_dir, "imgfiles2")
+        labels_dir = os.path.join(root_dir, "labels2")
         img_seconds = {}
         for img_file in os.listdir(img_dir):
             if '.jpg' not in img_file: continue
@@ -28,6 +28,7 @@ class ClassifyDataset(Dataset):
                 img_seconds[first] = max(img_seconds[first], second)
         label_ids = set([int(label_file.split('.')[0]) for label_file in os.listdir(labels_dir) if '.pkl' in label_file])
         label_ids = label_ids.intersection(img_seconds.keys())
+        print(f'total data len: {len(label_ids)}')
 
         for label_id in label_ids:
             label_path = os.path.join(labels_dir, f'{label_id}.pkl')
@@ -39,6 +40,9 @@ class ClassifyDataset(Dataset):
             for j in range(img_seconds[label_id]+1):
                 file_path = os.path.join(img_dir, f"{label_id}-{j}.jpg")
                 self.images.append(file_path)
+        
+        print(self.labels[0])
+        print(self.images[0])
 
     def read_labels(self, label_folder):
         for label_file in os.listdir(label_folder):
