@@ -38,8 +38,7 @@ class ClassifyDataset(Dataset):
             self.labels += labels
             for j in range(img_seconds[label_id]+1):
                 file_path = os.path.join(img_dir, f"{label_id}-{j}.jpg")
-                image = Image.open(file_path)
-                self.images.append(torchvision.transforms.functional.to_tensor(image).float())
+                self.images.append(file_path)
 
     def read_labels(self, label_folder):
         for label_file in os.listdir(label_folder):
@@ -79,6 +78,8 @@ class ClassifyDataset(Dataset):
         return len(self.images)
     
     def __getitem__(self, index):
-        image = self.images[int(index)]
+        image_path = self.images[int(index)]
+        image = Image.open(image_path).convert('RGB')
+        image = transforms.functional.to_tensor(image).float()
         label = self.labels[int(index)]
         return image, label

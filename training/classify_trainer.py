@@ -38,7 +38,6 @@ for epoch in range(100):
     for idx, batch in enumerate(train_dataloader):
         pixel_values, labels = batch
         pixel_values = pixel_values.to(device)
-        pixel_values = torch.tile(pixel_values, (1, 3, 1, 1))
         labels = labels.to(device)
         outputs = model(pixel_values)
         loss = compute_loss(outputs, labels)
