@@ -45,4 +45,6 @@ for epoch in range(100):
         optimizer.step()
         optimizer.zero_grad()
         print(f"Epoch: {epoch}, Loss:", loss.cpu().item(), f"{idx+1}/{len(data_loader)}")
+        if idx % 100 == 0:
+            torch.save(model.state_dict(), f'result/epoch{epoch}-{idx}.pth')
     torch.save(model.state_dict(), f'result/epoch{epoch}.pth')
